@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.gmall.bean.PmsBaseCatalog1;
+import com.gmall.bean.PmsBaseCatalog3;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
@@ -8,5 +9,5 @@ import tk.mybatis.mapper.common.Mapper;
  * @version 1.0
  * @date 2019/10/11 20:34
  */
-public interface PmsBaseCatalog3Mapper extends Mapper<PmsBaseCatalog1> {
+public interface PmsBaseCatalog3Mapper extends Mapper<PmsBaseCatalog3> {
 }

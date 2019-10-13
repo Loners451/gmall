@@ -3,10 +3,7 @@ package com.example.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.gmall.bean.PmsProductInfo;
 import com.gmall.service.SpuService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,9 +15,18 @@ import java.util.List;
 @RestController
 @CrossOrigin
 public class SpuController {
+    //baseSaleAttrList
 
     @Reference
     SpuService spuService;
+
+    @RequestMapping("saveSpuInfo")
+    public String saveSpuInfo(@RequestBody PmsProductInfo pmsProductInfo){
+
+
+        return "success";
+    }
+
 
     @RequestMapping("spuList")
     public List<PmsProductInfo> spuList(String catalog3Id){

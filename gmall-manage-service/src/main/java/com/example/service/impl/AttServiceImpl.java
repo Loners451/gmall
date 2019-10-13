@@ -3,8 +3,11 @@ package com.example.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.example.mapper.PmsBaseAttrInfoMapper;
 import com.example.mapper.PmsBaseAttrValueMapper;
+import com.example.mapper.PmsProductSaleAttrMapper;
 import com.gmall.bean.PmsBaseAttrInfo;
 import com.gmall.bean.PmsBaseAttrValue;
+import com.gmall.bean.PmsBaseSaleAttr;
+import com.gmall.bean.PmsProductSaleAttr;
 import com.gmall.service.AttService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class AttServiceImpl implements AttService {
 
     @Autowired
     PmsBaseAttrValueMapper pmsBaseAttrValueMapper;
+
+    @Autowired
+    PmsProductSaleAttrMapper pmsProductSaleAttrMapper;
 
 
     @Override
@@ -85,6 +91,11 @@ public class AttServiceImpl implements AttService {
         pmsBaseAttrValue.setAttrId(attrId);
         List<PmsBaseAttrValue> pmsBaseAttrValues = pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
         return pmsBaseAttrValues;
+    }
+
+    @Override
+    public List<PmsBaseSaleAttr> baseSaleAttrList() {
+        return pmsProductSaleAttrMapper.selectAll();
     }
 
 

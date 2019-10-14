@@ -8,7 +8,6 @@ import com.gmall.bean.PmsBaseCatalog1;
 import com.gmall.bean.PmsBaseCatalog2;
 import com.gmall.bean.PmsBaseCatalog3;
 import com.gmall.service.CatalogService;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.beans.factory.annotation.Autowired;
 
 

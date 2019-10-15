@@ -2,7 +2,9 @@ package com.example.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.example.util.PmsUploadUtil;
+import com.gmall.bean.PmsProductImage;
 import com.gmall.bean.PmsProductInfo;
+import com.gmall.bean.PmsProductSaleAttr;
 import com.gmall.service.SpuService;
 import org.csource.common.MyException;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,25 @@ public class SpuController {
 
     @Reference
     SpuService spuService;
+
+    @GetMapping("spuImageList")
+    public List<PmsProductImage> spuImageList(String spuId){
+
+        List<PmsProductImage> pmsProductImages = spuService.spuImageList(spuId);
+        for (PmsProductImage pmsProductImage : pmsProductImages) {
+            System.out.println(pmsProductImage);
+        }
+        return pmsProductImages;
+    }
+
+
+    @GetMapping("spuSaleAttrList")
+    public List<PmsProductSaleAttr> spuSaleAttrList(String spuId){
+
+        List<PmsProductSaleAttr> pmsProductSaleAttrs = spuService.spuSaleAttrList(spuId);
+        return pmsProductSaleAttrs;
+    }
+
 
     @RequestMapping("fileUpload")
     @ResponseBody
@@ -45,7 +66,7 @@ public class SpuController {
     }
 
 
-    @RequestMapping("spuList")
+    @GetMapping("spuList")
     public List<PmsProductInfo> spuList(String catalog3Id){
 
         List<PmsProductInfo> pmsProductInfos = spuService.spuList(catalog3Id);

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,7 +38,14 @@ public class AttServiceImpl implements AttService {
         PmsBaseAttrInfo pmsBaseAttrInfo=new PmsBaseAttrInfo();
         pmsBaseAttrInfo.setCatalog3Id(catalog3Id);
         List<PmsBaseAttrInfo> pmsBaseAttrInfos = pmsBaseAttrInfoMapper.select(pmsBaseAttrInfo);
+        for (PmsBaseAttrInfo baseAttrInfo : pmsBaseAttrInfos) {
+            List<PmsBaseAttrValue> pmsBaseAttrValues=new ArrayList<>();
 
+            PmsBaseAttrValue pmsBaseAttrValue=new PmsBaseAttrValue();
+            pmsBaseAttrValue.setAttrId(baseAttrInfo.getId());
+            pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
+            baseAttrInfo.setAttrValueList(pmsBaseAttrValues);
+        }
         return pmsBaseAttrInfos;
     }
 
@@ -75,6 +83,7 @@ public class AttServiceImpl implements AttService {
             // 删除后，将新的属性值插入
             List<PmsBaseAttrValue> attrValueList = pmsBaseAttrInfo.getAttrValueList();
             for (PmsBaseAttrValue pmsBaseAttrValue : attrValueList) {
+                pmsBaseAttrValue.setAttrId(id);
                 pmsBaseAttrValueMapper.insertSelective(pmsBaseAttrValue);
             }
 

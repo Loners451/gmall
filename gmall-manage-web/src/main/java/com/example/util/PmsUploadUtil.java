@@ -45,12 +45,15 @@ public class PmsUploadUtil {
         try {
 
             byte[] bytes = multipartFile.getBytes();// 获得上传的二进制对象
+            System.out.println(bytes);
 
             // 获得文件后缀名
             String originalFilename = multipartFile.getOriginalFilename();// a.jpg
             System.out.println(originalFilename);
             int i = originalFilename.lastIndexOf(".");
+            System.out.println(i);
             String extName = originalFilename.substring(i+1);
+            System.out.println(extName);
 
             String[] uploadInfos = storageClient.upload_file(bytes, extName, null);
 

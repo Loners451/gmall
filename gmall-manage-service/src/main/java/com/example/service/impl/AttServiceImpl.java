@@ -35,15 +35,15 @@ public class AttServiceImpl implements AttService {
 
     @Override
     public List<PmsBaseAttrInfo> attrInfosList(String catalog3Id) {
-        PmsBaseAttrInfo pmsBaseAttrInfo=new PmsBaseAttrInfo();
+        PmsBaseAttrInfo pmsBaseAttrInfo = new PmsBaseAttrInfo();
         pmsBaseAttrInfo.setCatalog3Id(catalog3Id);
         List<PmsBaseAttrInfo> pmsBaseAttrInfos = pmsBaseAttrInfoMapper.select(pmsBaseAttrInfo);
         for (PmsBaseAttrInfo baseAttrInfo : pmsBaseAttrInfos) {
-            List<PmsBaseAttrValue> pmsBaseAttrValues=new ArrayList<>();
 
-            PmsBaseAttrValue pmsBaseAttrValue=new PmsBaseAttrValue();
+            List<PmsBaseAttrValue> pmsBaseAttrValues = new ArrayList<>();
+            PmsBaseAttrValue pmsBaseAttrValue = new PmsBaseAttrValue();
             pmsBaseAttrValue.setAttrId(baseAttrInfo.getId());
-            pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
+            pmsBaseAttrValues = pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
             baseAttrInfo.setAttrValueList(pmsBaseAttrValues);
         }
         return pmsBaseAttrInfos;
@@ -95,7 +95,7 @@ public class AttServiceImpl implements AttService {
 
     @Override
     public List<PmsBaseAttrValue> getAttrValueList(String attrId) {
-        PmsBaseAttrValue pmsBaseAttrValue=new PmsBaseAttrValue();
+        PmsBaseAttrValue pmsBaseAttrValue = new PmsBaseAttrValue();
         pmsBaseAttrValue.setAttrId(attrId);
         List<PmsBaseAttrValue> pmsBaseAttrValues = pmsBaseAttrValueMapper.select(pmsBaseAttrValue);
         return pmsBaseAttrValues;

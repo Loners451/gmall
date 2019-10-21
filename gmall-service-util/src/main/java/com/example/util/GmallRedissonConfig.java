@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GmallRedissonConfig {
 
-    @Value("${spring.redis.host:0}")
+   /* @Value("${spring.redis.host:0}")
     private String host;
 
     @Value("${spring.redis.port:6379}")
@@ -27,6 +27,6 @@ public class GmallRedissonConfig {
         config.useSingleServer().setAddress("redis://"+host+":"+port);
         RedissonClient redisson = Redisson.create(config);
         return redisson;
-    }
+    }*/
 
 }   

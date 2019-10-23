@@ -134,7 +134,7 @@ public class SkuServiceImpl implements SkuService {
     }
 
     @Override
-    public List<PmsSkuInfo> getall(String catalog3Id) {
+    public List<PmsSkuInfo> getAllSku(String catalog3Id) {
         List<PmsSkuInfo> pmsSkuInfos = pmsSkuInfoMapper.selectAll();
 
         for (PmsSkuInfo pmsSkuInfo : pmsSkuInfos) {
@@ -148,5 +148,6 @@ public class SkuServiceImpl implements SkuService {
         }
         return pmsSkuInfos;
     }
+
 
 }

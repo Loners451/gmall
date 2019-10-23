@@ -17,6 +17,7 @@ import java.util.List;
 @Data
 public class PmsSearchSkuInfo  implements Serializable {
 
+
     @Id
     private long id;
     private String skuName;

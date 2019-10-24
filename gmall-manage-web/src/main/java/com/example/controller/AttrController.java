@@ -4,8 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.gmall.bean.PmsBaseAttrInfo;
 import com.gmall.bean.PmsBaseAttrValue;
 import com.gmall.bean.PmsBaseSaleAttr;
-import com.gmall.service.AttService;
-import org.apache.ibatis.annotations.Options;
+import com.gmall.service.AttrService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +21,7 @@ import java.util.List;
 public class AttrController {
 
     @Reference
-    AttService attService;
+    AttrService attService;
 
     @PostMapping("baseSaleAttrList")
     public List<PmsBaseSaleAttr> baseSaleAttrList(){

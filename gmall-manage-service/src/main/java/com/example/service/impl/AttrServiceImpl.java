@@ -4,17 +4,17 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.example.mapper.PmsBaseAttrInfoMapper;
 import com.example.mapper.PmsBaseAttrValueMapper;
 import com.example.mapper.PmsBaseSaleAttrMapper;
-import com.example.mapper.PmsProductSaleAttrMapper;
 import com.gmall.bean.PmsBaseAttrInfo;
 import com.gmall.bean.PmsBaseAttrValue;
 import com.gmall.bean.PmsBaseSaleAttr;
-import com.gmall.service.AttService;
+import com.gmall.service.AttrService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Moses
@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2019/10/12 10:25
  */
 @Service
-public class AttServiceImpl implements AttService {
+public class AttrServiceImpl implements AttrService {
 
     @Autowired
     PmsBaseAttrInfoMapper pmsBaseAttrInfoMapper;
@@ -105,6 +105,15 @@ public class AttServiceImpl implements AttService {
     public List<PmsBaseSaleAttr> baseSaleAttrList() {
 
         return pmsBaseSaleAttrMapper.selectAll();
+    }
+
+    @Override
+    public List<PmsBaseAttrInfo> getAttrValueListByValueId(Set<String> valueIdSet) {
+
+        String valueIdStr = StringUtils.join(valueIdSet, ",");//41,45,46
+        System.out.println("----->"+valueIdStr);
+        List<PmsBaseAttrInfo> pmsBaseAttrInfos = pmsBaseAttrInfoMapper.selectAttrValueListByValueId(valueIdStr);
+        return pmsBaseAttrInfos;
     }
 
 

@@ -32,10 +32,8 @@ import java.util.Map;
 @Service
 public class SearchServiceImpl implements SearchService {
 
-
     @Autowired
     JestClient jestClient;
-
 
     @Override
     public List<PmsSearchSkuInfo> list(PmsSearchParam pmsSearchParam) {
@@ -53,12 +51,12 @@ public class SearchServiceImpl implements SearchService {
         List<SearchResult.Hit<PmsSearchSkuInfo, Void>> hits = execute.getHits(PmsSearchSkuInfo.class);
         for (SearchResult.Hit<PmsSearchSkuInfo, Void> hit : hits) {
             PmsSearchSkuInfo source = hit.source;
+
             Map<String, List<String>> highlight = hit.highlight;
             if(highlight!=null){
                 String skuName = highlight.get("skuName").get(0);
                 source.setSkuName(skuName);
             }
-
             pmsSearchSkuInfos.add(source);
         }
 
@@ -68,7 +66,7 @@ public class SearchServiceImpl implements SearchService {
 
     private String getSearchDsl(PmsSearchParam pmsSearchParam) {
 
-        String [] skuAttrValueList = pmsSearchParam.getValueId();
+        String[] skuAttrValueList = pmsSearchParam.getValueId();
         String keyword = pmsSearchParam.getKeyword();
         String catalog3Id = pmsSearchParam.getCatalog3Id();
 
@@ -111,9 +109,11 @@ public class SearchServiceImpl implements SearchService {
         // size
         searchSourceBuilder.size(20);
 
+
         // aggs
         TermsBuilder groupby_attr = AggregationBuilders.terms("groupby_attr").field("skuAttrValueList.valueId");
         searchSourceBuilder.aggregation(groupby_attr);
+
 
         return searchSourceBuilder.toString();
 

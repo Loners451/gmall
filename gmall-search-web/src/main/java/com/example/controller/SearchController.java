@@ -156,7 +156,7 @@ public class SearchController {
         return urlParam;
     }
 
-    @RequestMapping("/")
+    @RequestMapping("index")
     public String index() {
         return "index";
     }

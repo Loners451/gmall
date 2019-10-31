@@ -12,5 +12,6 @@ import java.util.List;
  * @date 2019/10/9 16:18
  */
 public interface UserMapper extends Mapper<UmsMember> {
+
     List<UmsMember> getAllUser();
 }   

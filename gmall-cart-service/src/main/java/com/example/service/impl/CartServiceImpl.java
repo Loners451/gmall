@@ -27,10 +27,10 @@ import java.util.Map;
 public class CartServiceImpl implements CartService {
 
     @Autowired
-    OmsCartItemMapper omsCartItemMapper;
+    RedisUtil redisUtil;
 
     @Autowired
-    RedisUtil redisUtil;
+    OmsCartItemMapper omsCartItemMapper;
 
     @Override
     public OmsCartItem ifCartExistByUser(String memberId, String skuId) {

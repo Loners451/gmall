@@ -14,11 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
+/*
  * @author Moses
  * @version 1.0
  * @date 2019/10/29 19:04
  */
+
 @Component
 public class AuthInterceptor  extends HandlerInterceptorAdapter {
 
@@ -62,7 +63,7 @@ public class AuthInterceptor  extends HandlerInterceptorAdapter {
                     ip = "127.0.0.1";
                 }
             }
-            String successJson  = HttpclientUtil.doGet("http://passport.gmall.com:8085/verify?token=" + token+"&currentIp="+ip);
+            String successJson  = HttpclientUtil.doGet("http://gmall.com:8085/verify?token=" + token+"&currentIp="+ip);
 
             successMap = JSON.parseObject(successJson, Map.class);
 
@@ -75,7 +76,7 @@ public class AuthInterceptor  extends HandlerInterceptorAdapter {
             if (!success.equals("success")) {
                 //重定向会passport登录
                 StringBuffer requestURL = request.getRequestURL();
-                response.sendRedirect("http://passport.gmall.com:8085/index?ReturnUrl="+requestURL);
+                response.sendRedirect("http://gmall.com:8085/index?ReturnUrl="+requestURL);
                 return false;
             }
 

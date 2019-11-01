@@ -30,28 +30,20 @@ import java.util.List;
 @Controller
 public class CartController {
 
+
     @Reference
     SkuService skuService;
 
     @Reference
     CartService cartService;
 
-    @RequestMapping("toTrade")
-    @LoginRequired(loginSuccess = true)
-    public String toTrade(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
-
-        String memberId = (String)request.getAttribute("memberId");
-        String nickname = (String)request.getAttribute("nickname");
-
-        return "toTrade";
-    }
 
     @RequestMapping("checkCart")
     @LoginRequired(loginSuccess = false)
-    public String checkCart(String isChecked,String skuId,HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
+    public String checkCart(String isChecked, String skuId, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
 
-        String memberId = (String)request.getAttribute("memberId");
-        String nickname = (String)request.getAttribute("nickname");
+        String memberId = (String) request.getAttribute("memberId");
+        String nickname = (String) request.getAttribute("nickname");
 
         // 调用服务，修改状态
         OmsCartItem omsCartItem = new OmsCartItem();
@@ -62,12 +54,11 @@ public class CartController {
 
         // 将最新的数据从缓存中查出，渲染给内嵌页
         List<OmsCartItem> omsCartItems = cartService.cartList(memberId);
-        modelMap.put("cartList",omsCartItems);
+        modelMap.put("cartList", omsCartItems);
 
-        //被选中商品的价格
-        BigDecimal totalAmount=gettotalAmount(omsCartItems);
-        modelMap.put("totalAmount",totalAmount);
-
+        // 被勾选商品的总额
+        BigDecimal totalAmount = getTotalAmount(omsCartItems);
+        modelMap.put("totalAmount", totalAmount);
         return "cartListInner";
     }
 
@@ -77,42 +68,45 @@ public class CartController {
     public String cartList(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
 
         List<OmsCartItem> omsCartItems = new ArrayList<>();
-        String memberId = (String)request.getAttribute("memberId");
-        String nickname = (String)request.getAttribute("nickname");
+        String memberId = (String) request.getAttribute("memberId");
+        String nickname = (String) request.getAttribute("nickname");
 
-        if(StringUtils.isNotBlank(memberId)){
+        if (StringUtils.isNotBlank(memberId)) {
             // 已经登录查询db
             omsCartItems = cartService.cartList(memberId);
-        }else{
+        } else {
             // 没有登录查询cookie
             String cartListCookie = CookieUtil.getCookieValue(request, "cartListCookie", true);
-            if(StringUtils.isNotBlank(cartListCookie)){
-                omsCartItems = JSON.parseArray(cartListCookie,OmsCartItem.class);
+            if (StringUtils.isNotBlank(cartListCookie)) {
+                omsCartItems = JSON.parseArray(cartListCookie, OmsCartItem.class);
             }
         }
 
         for (OmsCartItem omsCartItem : omsCartItems) {
             omsCartItem.setTotalPrice(omsCartItem.getPrice().multiply(omsCartItem.getQuantity()));
         }
-        //被选中商品的价格
-        BigDecimal totalAmount=gettotalAmount(omsCartItems);
-        modelMap.put("totalAmount",totalAmount);
-        modelMap.put("cartList",omsCartItems);
+
+        modelMap.put("cartList", omsCartItems);
+        // 被勾选商品的总额
+        BigDecimal totalAmount = getTotalAmount(omsCartItems);
+        modelMap.put("totalAmount", totalAmount);
         return "cartList";
     }
-    //计算总价
-    private BigDecimal gettotalAmount(List<OmsCartItem> omsCartItems) {
+
+    private BigDecimal getTotalAmount(List<OmsCartItem> omsCartItems) {
         BigDecimal totalAmount = new BigDecimal("0");
 
-        for (OmsCartItem omsCartItem : omsCartItems) {
-            BigDecimal totalPrice = omsCartItem.getTotalPrice();
-
-            if (omsCartItem.getIsChecked().equals("1")){
-                totalAmount=totalAmount.add(totalPrice);
+        System.out.println(omsCartItems.size());
+        if (omsCartItems != null) {
+            for (OmsCartItem omsCartItem : omsCartItems) {
+                BigDecimal totalPrice = omsCartItem.getTotalPrice();
+                if (omsCartItem.getIsChecked().equals("1")) {
+                    totalAmount = totalAmount.add(totalPrice);
+                }
             }
-
         }
-        return  totalAmount;
+
+        return totalAmount;
     }
 
     @RequestMapping("addToCart")
@@ -137,12 +131,14 @@ public class CartController {
         omsCartItem.setProductPic(skuInfo.getSkuDefaultImg());
         omsCartItem.setProductSkuCode("11111111111");
         omsCartItem.setProductSkuId(skuId);
+        omsCartItem.setIsChecked("1");
         omsCartItem.setQuantity(new BigDecimal(quantity));
 
 
         // 判断用户是否登录
-        String memberId = (String)request.getAttribute("memberId");
-        String nickname = (String)request.getAttribute("nickname");
+        String memberId = (String) request.getAttribute("memberId");
+        String nickname = (String) request.getAttribute("nickname");
+
 
         if (StringUtils.isBlank(memberId)) {
             // 用户没有登录
@@ -175,16 +171,16 @@ public class CartController {
         } else {
             // 用户已经登录
             // 从db中查出购物车数据
-            OmsCartItem omsCartItemFromDb = cartService.ifCartExistByUser(memberId,skuId);
+            OmsCartItem omsCartItemFromDb = cartService.ifCartExistByUser(memberId, skuId);
 
-            if(omsCartItemFromDb==null){
+            if (omsCartItemFromDb == null) {
                 // 该用户没有添加过当前商品
                 omsCartItem.setMemberId(memberId);
                 omsCartItem.setMemberNickname("test小明");
                 omsCartItem.setQuantity(new BigDecimal(quantity));
                 cartService.addCart(omsCartItem);
 
-            }else{
+            } else {
                 // 该用户添加过当前商品
                 omsCartItemFromDb.setQuantity(omsCartItemFromDb.getQuantity().add(omsCartItem.getQuantity()));
                 cartService.updateCart(omsCartItemFromDb);
@@ -213,4 +209,5 @@ public class CartController {
 
         return b;
     }
+
 }   

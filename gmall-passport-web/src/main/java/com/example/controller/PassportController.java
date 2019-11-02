@@ -73,7 +73,7 @@ public class PassportController {
         UmsMember umsMemberCheck = userService.checkOauthUser(umsCheck);
 
         if(umsMemberCheck==null){
-            userService.addOauthUser(umsMember);
+             umsMember = userService.addOauthUser(umsMember);
         }else{
             umsMember = umsMemberCheck;
         }
@@ -83,7 +83,7 @@ public class PassportController {
         String memberId = umsMember.getId();
         String nickname = umsMember.getNickname();
         Map<String,Object> userMap = new HashMap<>();
-        userMap.put("memberId",memberId);
+        userMap.put("memberId",memberId);//是保存数据库后主键返回策略生成的ID
         userMap.put("nickname",nickname);
 
 
@@ -131,6 +131,7 @@ public class PassportController {
     @RequestMapping("login")
     @ResponseBody
     public String login(UmsMember umsMember, HttpServletRequest request){
+
 
         String token = "";
 

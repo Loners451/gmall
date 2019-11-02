@@ -3,6 +3,7 @@ package com.gmall.service;
 
 
 import com.gmall.bean.UmsMember;
+import com.gmall.bean.UmsMemberReceiveAddress;
 
 import java.util.List;
 
@@ -19,7 +20,11 @@ public interface UserService {
 
     void addUserToken(String token, String memberId);
 
-    void addOauthUser(UmsMember umsMember);
+    UmsMember addOauthUser(UmsMember umsMember);
 
     UmsMember checkOauthUser(UmsMember umsCheck);
+
+    List<UmsMemberReceiveAddress> getReceiveAddressByMemberId(String memberId);
+
+    UmsMemberReceiveAddress getReceiveAddressById(String receiveAddressId);
 }

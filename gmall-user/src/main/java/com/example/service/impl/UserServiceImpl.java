@@ -2,9 +2,11 @@ package com.example.service.impl;
 
 
 import com.alibaba.fastjson.JSON;
+import com.example.mapper.UmsMemberReceiveAddressMapper;
 import com.example.mapper.UserMapper;
 import com.example.util.RedisUtil;
 import com.gmall.bean.UmsMember;
+import com.gmall.bean.UmsMemberReceiveAddress;
 import com.gmall.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     RedisUtil redisUtil;
+
+    @Autowired
+    UmsMemberReceiveAddressMapper umsMemberReceiveAddressMapper;
 
     @Override
     public List<UmsMember> getAllUser() {
@@ -72,14 +77,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addOauthUser(UmsMember umsMember) {
+    public UmsMember addOauthUser(UmsMember umsMember) {
         userMapper.insertSelective(umsMember);
+        return umsMember;
     }
 
     @Override
     public UmsMember checkOauthUser(UmsMember umsCheck) {
         UmsMember umsMember = userMapper.selectOne(umsCheck);
         return umsMember;
+    }
+
+    @Override
+    public List<UmsMemberReceiveAddress> getReceiveAddressByMemberId(String memberId) {
+        // 封装的参数对象
+        UmsMemberReceiveAddress umsMemberReceiveAddress = new UmsMemberReceiveAddress();
+        umsMemberReceiveAddress.setMemberId(memberId);
+        List<UmsMemberReceiveAddress> umsMemberReceiveAddresses = umsMemberReceiveAddressMapper.select(umsMemberReceiveAddress);
+
+
+//       Example example = new Example(UmsMemberReceiveAddress.class);
+//       example.createCriteria().andEqualTo("memberId",memberId);
+//       List<UmsMemberReceiveAddress> umsMemberReceiveAddresses = umsMemberReceiveAddressMapper.selectByExample(example);
+
+        return umsMemberReceiveAddresses;
+    }
+
+    @Override
+    public UmsMemberReceiveAddress getReceiveAddressById(String receiveAddressId) {
+        UmsMemberReceiveAddress umsMemberReceiveAddress = new UmsMemberReceiveAddress();
+        umsMemberReceiveAddress.setId(receiveAddressId);
+        UmsMemberReceiveAddress umsMemberReceiveAddress1 = umsMemberReceiveAddressMapper.selectOne(umsMemberReceiveAddress);
+        return umsMemberReceiveAddress1;
     }
 
     private UmsMember loginFromDb(UmsMember umsMember) {

@@ -3,9 +3,12 @@ package com.gmall.bean;
 import lombok.Data;
 
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class OmsOrder implements Serializable {
@@ -56,6 +59,9 @@ public class OmsOrder implements Serializable {
     private Date receiveTime;
     private Date commentTime;
     private Date modifyTime;
+
+    @Transient
+    List<OmsOrderItem> omsOrderItems;
 
 
 }

@@ -1,12 +1,19 @@
 package com.example.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.example.mapper.OmsOrderItemMapper;
+import com.example.mapper.OmsOrderMapper;
 import com.example.util.RedisUtil;
+import com.gmall.bean.OmsOrder;
+import com.gmall.bean.OmsOrderItem;
+import com.gmall.service.CartService;
 import com.gmall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -19,8 +26,18 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     RedisUtil redisUtil;
 
+    @Autowired
+    OmsOrderMapper omsOrderMapper;
+
+    @Autowired
+    OmsOrderItemMapper omsOrderItemMapper;
+
+    @Reference
+    CartService cartService;
+
+
     @Override
-    public String checkTradeCode(String memberId,String tradeCode) {
+    public String checkTradeCode(String memberId, String tradeCode) {
 
         Jedis jedis = null ;
 
@@ -66,6 +83,30 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return tradeCode;
+    }
 
+    @Override
+    public void saveOrder(OmsOrder omsOrder) {
+        // 保存订单表
+        omsOrderMapper.insertSelective(omsOrder);
+        String orderId = omsOrder.getId();
+        // 保存订单详情
+        List<OmsOrderItem> omsOrderItems = omsOrder.getOmsOrderItems();
+        for (OmsOrderItem omsOrderItem : omsOrderItems) {
+            omsOrderItem.setOrderId(orderId);
+            omsOrderItemMapper.insertSelective(omsOrderItem);
+            // 删除购物车数据
+            //cartService.delCart();
+        }
+
+    }
+
+    @Override
+    public OmsOrder getOrderByOutTradeNo(String outTradeNo) {
+        OmsOrder omsOrder = new OmsOrder();
+        omsOrder.setOrderSn(outTradeNo);
+        OmsOrder omsOrder1 = omsOrderMapper.selectOne(omsOrder);
+
+        return omsOrder1;
     }
 }

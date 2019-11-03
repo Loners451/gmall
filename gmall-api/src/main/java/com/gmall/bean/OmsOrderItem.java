@@ -17,7 +17,7 @@ public class OmsOrderItem implements Serializable {
     private String productBrand;
     private String productSn;
     private BigDecimal productPrice;
-    private int productQuantity;
+    private BigDecimal productQuantity;
     private String productSkuId;
     private String productSkuCode;
     private String productCategoryId;
@@ -28,7 +28,7 @@ public class OmsOrderItem implements Serializable {
     private BigDecimal promotionAmount;
     private BigDecimal couponAmount;
     private BigDecimal integrationAmount;
-    private String realAmount;
+    private BigDecimal realAmount;
     private int giftIntegration;
     private int giftGrowth;
     private String productAttr;

@@ -13,16 +13,14 @@ import com.gmall.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Moses
@@ -49,7 +47,7 @@ public class OrderController {
 
     @RequestMapping("submitOrder")
     @LoginRequired(loginSuccess = true)
-    public String submitOrder(String receiveAddressId, BigDecimal totalAmount, String tradeCode, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
+    public ModelAndView submitOrder(String receiveAddressId, BigDecimal totalAmount, String tradeCode, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
 
 
         String memberId = (String) request.getAttribute("memberId");
@@ -105,7 +103,7 @@ public class OrderController {
                     // 检价
                     boolean b = skuService.checkPrice(omsCartItem.getProductSkuId(),omsCartItem.getPrice());
                     if (b == false) {
-                        return "tradeFail";
+                        return  new ModelAndView("tradeFail");
                     }
                     // 验库存,远程调用库存系统
                     omsOrderItem.setProductPic(omsCartItem.getProductPic());
@@ -114,9 +112,9 @@ public class OrderController {
                     omsOrderItem.setOrderSn(outTradeNo);// 外部订单号，用来和其他系统进行交互，防止重复
                     omsOrderItem.setProductCategoryId(omsCartItem.getProductCategoryId());
                     omsOrderItem.setProductPrice(omsCartItem.getPrice());
-                   /* omsOrderItem.setRealAmount(omsCartItem.getTotalPrice());
-                    omsOrderItem.setProductQuantity(omsCartItem.getQuantity());*/
-                    omsOrderItem.setProductSkuCode("111111111111");
+                   omsOrderItem.setRealAmount(omsCartItem.getTotalPrice());
+                    omsOrderItem.setProductQuantity(omsCartItem.getQuantity());
+                    omsOrderItem.setProductSkuCode("3333333333333");
                     omsOrderItem.setProductSkuId(omsCartItem.getProductSkuId());
                     omsOrderItem.setProductId(omsCartItem.getProductId());
                     omsOrderItem.setProductSn("仓库对应的商品编号");// 在仓库中的skuId
@@ -128,14 +126,18 @@ public class OrderController {
 
             // 将订单和订单详情写入数据库
             // 删除购物车的对应商品
-       /*     orderService.saveOrder(omsOrder);*/
+           orderService.saveOrder(omsOrder);
 
+            Map<String,Object> map=new HashMap<String,Object>();
+            map.put("outTradeNo", outTradeNo);
+            map.put("totalAmount", totalAmount);
 
             // 重定向到支付系统
+            return  new ModelAndView("redirect:http://gmall.com:8087/index",map);
+
         } else {
-            return "tradeFail";
+            return new ModelAndView("tradeFail");
         }
-    return  null;
 
     }
 

@@ -18,10 +18,10 @@ public class PaymentInfo implements Serializable {
 
     @Column
     @Id
-    private String id;
+    private String  id;
 
     @Column
-    private String outTradeNo;
+    private String orderSn;
 
     @Column
     private String orderId;
@@ -46,6 +46,5 @@ public class PaymentInfo implements Serializable {
 
     @Column
     private String callbackContent;
-
 
 }

@@ -33,7 +33,7 @@ public class OmsOrder implements Serializable {
     private BigDecimal discountAmount;
     private int payType;
     private int sourceType;
-    private int status;
+    private String status;
     private int orderType;
     private String deliveryCompany;
     private String deliverySn;

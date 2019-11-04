@@ -56,6 +56,7 @@ public class PaymentController {
         String total_amount = request.getParameter("total_amount");
         String subject = request.getParameter("subject");
         String call_back_content = request.getQueryString();
+        System.out.println(call_back_content);
 
 
         // 通过支付宝的paramsMap进行签名验证，2.0版本的接口将paramsMap参数去掉了，导致同步请求没法验签

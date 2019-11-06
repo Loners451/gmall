@@ -130,7 +130,7 @@ public class PassportController {
 
     @RequestMapping("login")
     @ResponseBody
-    public String login(UmsMember umsMember, HttpServletRequest request){
+    public String login(UmsMember umsMember, HttpServletRequest request,Model model){
 
 
         String token = "";
@@ -148,6 +148,7 @@ public class PassportController {
             userMap.put("memberId",memberId);
             userMap.put("nickname",nickname);
 
+            model.addAttribute("nickname", nickname);
 
             String ip = request.getHeader("x-forwarded-for");// 通过nginx转发的客户端ip
             if(StringUtils.isBlank(ip)){

@@ -152,6 +152,7 @@ public class OrderController {
 
         String memberId = (String)request.getAttribute("memberId");
         String nickname = (String)request.getAttribute("nickname");
+        System.out.println(nickname);
 
         // 收件人地址列表
         List<UmsMemberReceiveAddress> umsMemberReceiveAddresses = userService.getReceiveAddressByMemberId(memberId);
@@ -171,6 +172,8 @@ public class OrderController {
                 omsOrderItems.add(omsOrderItem);
             }
         }
+
+        modelMap.put("nickname", nickname);
 
         modelMap.put("omsOrderItems", omsOrderItems);
         modelMap.put("userAddressList", umsMemberReceiveAddresses);
